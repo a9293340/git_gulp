@@ -6,6 +6,9 @@ var fileinclude = require('gulp-file-include');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
+var imagemin = require('gulp-imagemin');
+
+// npm install --save-dev gulp-imagemin 壓圖工具
 
 
 // sass 轉譯
@@ -39,3 +42,10 @@ gulp.task('default', function() {
     gulp.watch('./dev/sass/*.scss' ,['sass']).on('change',reload);
     gulp.watch(['./dev/*.html' ,'./dev/**/*.html'] ,['fileinclude']).on('change',reload);
 });
+
+// 壓圖
+gulp.task('minimage',function(){
+  gulp.src('./dev/images/*')
+  .pipe(imagemin())
+  .pipe(gulp.dest('dest/images'))
+})
