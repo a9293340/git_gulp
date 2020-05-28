@@ -8,8 +8,13 @@ var reload = browserSync.reload;
 
 var imagemin = require('gulp-imagemin');
 
+var gutil = require( 'gulp-util' );
+var ftp = require( 'vinyl-ftp' );
+
 // npm install --save-dev gulp-imagemin 壓圖工具
 
+// npm i gulp-util --save-dev  上傳ftp
+// npm i vinyl-ftp --save-dev  上傳ftp
 
 // sass 轉譯
 gulp.task('sass', function () {
@@ -49,3 +54,29 @@ gulp.task('minimage',function(){
   .pipe(imagemin())
   .pipe(gulp.dest('dest/images'))
 })
+
+// 上傳FTP(上傳前先壓圖)
+gulp.task( 'ftp',['minimage'],function () {
+  var conn = ftp.create( {
+      host:     '140.115.236.71',
+      user:     '%ed101+',
+      password: '!654=stu&',
+      parallel: 10,
+  } );
+
+  var globs = [
+      'dest/**',
+      'dest/css/**',
+      'dest/js/**',
+      'dest/images/**',
+      'index.html'
+  ];
+
+  // using base = '.' will transfer everything to /public_html correctly
+  // turn off buffering in gulp.src for best performance
+
+  return gulp.src( globs, { base: '.', buffer: false } )
+      .pipe( conn.newer( './T2000256' ) ) // only upload newer files
+      .pipe( conn.dest( './T2000256' ) );
+
+} );
