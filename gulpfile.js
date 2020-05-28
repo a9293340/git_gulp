@@ -106,3 +106,4 @@ gulp.task('browserSync',['php'], function() {
 gulp.task('devphp', [ 'browserSync'], function() {
   gulp.watch('./php/*.php', browserSync.reload);
 });
+
